@@ -98,7 +98,7 @@ const VerifyForm = ({ site }: { site: Pick<Site, "id" | "hostname"> }) => {
 const VerificationDialog = ({ site }: { site: Pick<Site, "id" | "hostname"> }) => {
     return (
         <Dialog>
-            <DialogTrigger render={<Button variant="outline">Open Dialog</Button>} />
+            <DialogTrigger render={<Button variant="outline" size="sm">Verify</Button>} />
             <DialogContent >
                 <VerifyForm site={site} />
             </DialogContent>

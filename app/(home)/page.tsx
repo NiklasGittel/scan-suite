@@ -1,7 +1,5 @@
-import { Button } from "@/components/ui/button"
 import { getSites } from "@/db/queries/sites";
 import { SiteTable } from "@/features/sites/components/SitesTable";
-import VerificationDialog from "@/features/verification/components/VerificationDialog";
 
 export default async function Page() {
   const sites = await getSites();
@@ -12,7 +10,6 @@ export default async function Page() {
         <div className="overflow-hidden rounded-md border">
           <SiteTable data={sites}></SiteTable>
         </div>
-        <VerificationDialog site={sites[0]} />
       </div>
     </div>
   )
