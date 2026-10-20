@@ -1,0 +1,1 @@
+export type VerifyError = "not_found" | "mismatch" | "unreachable";

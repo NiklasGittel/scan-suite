@@ -15,4 +15,4 @@ export const siteTableColumns = columnHelper.columns([
   columnHelper.accessor("status", {
     header: "Status",
   }),
-])
+]) 
