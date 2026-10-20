@@ -11,12 +11,12 @@ export const users = pgTable('users', {
 
 export const sites = pgTable('sites', {
     id: uuid('id').primaryKey().defaultRandom(),
-    ownerId: uuid('owner_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
-    hostname: text('hostname').notNull(),
+    ownerId: uuid('owner_id').references(() => users.id, { onDelete: 'cascade' }),
+    hostname: text('hostname').notNull().unique(),
     verificationToken: uuid('verification_token').notNull().defaultRandom(),
     status: siteStatus('status').notNull().default('pending'),
     verifiedMethod: verifyMethod('verified_method'),
     verifiedAt: timestamp('verified_at', { withTimezone: true }),
     lastCheckedAt: timestamp('last_checked_at', { withTimezone: true }),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
-}, (t) => [unique().on(t.ownerId, t.hostname)]);
+});
