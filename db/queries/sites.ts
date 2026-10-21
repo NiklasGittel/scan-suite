@@ -21,6 +21,15 @@ export async function getSite(siteId: string) {
   return site ?? null;
 }
 
+export async function createSite(hostname: string) {
+  const [site] = await db
+    .insert(sites)
+    .values({ hostname })
+    .onConflictDoNothing({ target: sites.hostname })
+    .returning({ id: sites.id });
+  return site ?? null;
+}
+
 export async function markSiteVerified(siteId: string, method: VerifyMethod) {
   await db.update(sites)
     .set({ status: 'verified', verifiedMethod: method, verifiedAt: new Date(), lastCheckedAt: new Date() })
