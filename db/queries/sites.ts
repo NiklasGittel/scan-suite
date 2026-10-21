@@ -5,12 +5,12 @@ import { eq } from 'drizzle-orm';
 import { VerifyMethod } from '../types';
 
 export const getSites = async () => {
-    return db.select({
-        id: sites.id,
-        hostname: sites.hostname,
-        status: sites.status,
-        verifiedAt: sites.verifiedAt,
-    }).from(sites);
+  return db.select({
+    id: sites.id,
+    hostname: sites.hostname,
+    status: sites.status,
+    verifiedAt: sites.verifiedAt,
+  }).from(sites);
 }
 
 export async function getSite(siteId: string) {
@@ -20,6 +20,16 @@ export async function getSite(siteId: string) {
     .where(eq(sites.id, siteId));
   return site ?? null;
 }
+
+export const deleteSite = async (siteId: string) => {
+  try {
+    await db.delete(sites)
+      .where(eq(sites.id, siteId));
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
 
 export async function createSite(hostname: string) {
   const [site] = await db

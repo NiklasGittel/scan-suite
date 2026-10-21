@@ -21,3 +21,9 @@ export const AddSiteInput = z.object({
 });
 
 export type AddSiteInput = z.infer<typeof AddSiteInput>;
+
+export const DeleteSiteInput = z.object({
+  siteId: z.uuid({ error: 'Invalid id.' }),
+});
+
+export type DeleteSiteInput = z.infer<typeof DeleteSiteInput>;
