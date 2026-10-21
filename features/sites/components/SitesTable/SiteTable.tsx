@@ -14,6 +14,7 @@ import {
 import { siteTableFeatures, } from "./siteTableFeatures"
 import { siteTableColumns } from "./siteTableColumns"
 import { type SiteListItem } from "@/db/queries/sites"
+import { useRouter } from "next/navigation"
 
 
 export interface SiteTableProps {
@@ -23,12 +24,12 @@ export interface SiteTableProps {
 export function SiteTable({
   data,
 }: SiteTableProps) {
+  const router = useRouter();
   const table = useTable({
     features: siteTableFeatures,
     data,
     columns: siteTableColumns,
   })
-
   return (
     <div className="overflow-hidden rounded-md border">
       <Table>
@@ -54,6 +55,7 @@ export function SiteTable({
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}
                 className="group"
+                onClick={() => router.push(`/sites/${row.original.id}`)}
               >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id}>
