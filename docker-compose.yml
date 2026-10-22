@@ -5,8 +5,9 @@ services:
       POSTGRES_USER: scansuite
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set in .env}
       POSTGRES_DB: scansuite
+      PGDATA: /var/lib/postgresql/data
     volumes:
-      - pgdata:/var/lib/postgresql
+      - dbdata:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U scansuite"]
       interval: 5s
@@ -15,4 +16,4 @@ services:
       - "127.0.0.1:5432:5432"   # dev only; bound to localhost
 
 volumes:
-  pgdata:
+  dbdata:
