@@ -5,7 +5,7 @@ export const siteStatus = pgEnum('site_status', ['pending', 'verified', 'expired
 export const verifyMethod = pgEnum('verify_method', ['dns', 'file', 'meta']);
 export const findingStatus = pgEnum('finding_status', ['open', 'closed', 'false_positive']);
 export const findingCategory = pgEnum('finding_category', ['seo', 'security', 'accessibility', 'geo', 'compliance']);
-export const findingSeverity = pgEnum('finding_severity', ['critical', 'high', 'medium', 'low']);
+export const findingSeverity = pgEnum('finding_severity', ['critical', 'high', 'medium', 'low', 'info']);
 
 export const scanStatus = pgEnum('scan_status', ['pending', 'running', 'completed', 'failed']);
 

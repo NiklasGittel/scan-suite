@@ -9,11 +9,12 @@ import {
     rowSelectionFeature,
     rowSortingFeature,
     sortFn_alphanumeric,
+    sortFn_datetime,
     sortFn_text,
     tableFeatures,
 } from "@tanstack/react-table"
 
-export const siteTableFeatures = tableFeatures({
+export const dataTableFeatures = tableFeatures({
     columnFilteringFeature,
     columnVisibilityFeature,
     rowPaginationFeature,
@@ -23,7 +24,7 @@ export const siteTableFeatures = tableFeatures({
     paginatedRowModel: createPaginatedRowModel(),
     sortedRowModel: createSortedRowModel(),
     filterFns: { includesString: filterFn_includesString },
-    sortFns: { alphanumeric: sortFn_alphanumeric, text: sortFn_text },
+    sortFns: { alphanumeric: sortFn_alphanumeric, text: sortFn_text, datetime: sortFn_datetime },
 })
 
-export type SiteTableFeatures = typeof siteTableFeatures
+export type DataTableFeatures = typeof dataTableFeatures

@@ -2,13 +2,12 @@
 
 import { createColumnHelper } from "@tanstack/react-table"
 
-import { type SiteTableFeatures } from "./siteTableFeatures"
+import { type DataTableFeatures } from "@/components/DataTable"
 import { type SiteListItem } from "@/db/queries/sites"
 import VerificationDialog from "@/features/verification/components/VerificationDialog"
-import { Delete } from "lucide-react"
 import { DeleteSiteDialog } from "../DeleteSiteDialog"
 
-const columnHelper = createColumnHelper<SiteTableFeatures, SiteListItem>()
+const columnHelper = createColumnHelper<DataTableFeatures, SiteListItem>()
 
 export const siteTableColumns = columnHelper.columns([
   columnHelper.accessor("hostname", {

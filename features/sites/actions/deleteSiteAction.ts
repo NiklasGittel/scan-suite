@@ -14,7 +14,8 @@ import { deleteSite } from "@/db/queries/sites";
 export const deleteSiteAction = async (siteId: string): Promise<DeleteSiteActionState> => {
     const parsed = DeleteSiteInput.safeParse({ siteId });
     if (!parsed.success) return { error: 'invalid_input' };
-    var deleted = await deleteSite(siteId)
+    const deleted = 
+        await deleteSite(siteId)
         .then(() => true)
         .catch(() => false);
     //TODO: handle different types of errors
