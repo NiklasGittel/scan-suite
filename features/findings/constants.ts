@@ -16,12 +16,21 @@ export const CATEGORY_META: Record<FindingCategory, { label: string; Icon: Lucid
     compliance: { label: "Compliance", Icon: GavelIcon },
 };
 
+export const CATEGORY_FILTER_OPTIONS = Object.entries(CATEGORY_META).map(
+    ([value, { label }]) => ({ value, label }),
+);
+
 type BadgeVariant = "default" | "secondary" | "destructive" | "outline" | "ghost";
 
 export const SEVERITY_META: Record<FindingSeverity, { label: string; variant: BadgeVariant }> = {
     critical: { label: "Critical", variant: "destructive" },
     high: { label: "High", variant: "destructive" },
-    medium: { label: "Medium", variant: "outline" },
+    medium: { label: "Medium", variant: "default" },
     low: { label: "Low", variant: "secondary" },
     info: { label: "Info", variant: "ghost" },
 };
+
+export const SEVERITY_FILTER_OPTIONS = Object.entries(SEVERITY_META).map(([value, { label }]) => ({ value, label }));
+
+
+

@@ -1,9 +1,13 @@
 import {
+    columnFacetingFeature,
     columnFilteringFeature,
     columnVisibilityFeature,
+    createFacetedRowModel,
+    createFacetedUniqueValues,
     createFilteredRowModel,
     createPaginatedRowModel,
     createSortedRowModel,
+    filterFn_arrHas,
     filterFn_includesString,
     rowPaginationFeature,
     rowSelectionFeature,
@@ -15,15 +19,18 @@ import {
 } from "@tanstack/react-table"
 
 export const dataTableFeatures = tableFeatures({
+    columnFacetingFeature,
     columnFilteringFeature,
     columnVisibilityFeature,
     rowPaginationFeature,
     rowSelectionFeature,
     rowSortingFeature,
+    facetedRowModel: createFacetedRowModel(),
+    facetedUniqueValues: createFacetedUniqueValues(),
     filteredRowModel: createFilteredRowModel(),
     paginatedRowModel: createPaginatedRowModel(),
     sortedRowModel: createSortedRowModel(),
-    filterFns: { includesString: filterFn_includesString },
+    filterFns: { arrHas: filterFn_arrHas, includesString: filterFn_includesString },
     sortFns: { alphanumeric: sortFn_alphanumeric, text: sortFn_text, datetime: sortFn_datetime },
 })
 

@@ -3,16 +3,30 @@
 import { createColumnHelper } from "@tanstack/react-table"
 
 import { Badge } from "@/components/ui/badge"
-import { CATEGORY_META, SEVERITY_META } from "@/features/findings/constants"
+import {
+  CATEGORY_FILTER_OPTIONS,
+  CATEGORY_META,
+  SEVERITY_FILTER_OPTIONS,
+  SEVERITY_META,
+} from "@/features/findings/constants"
 import { formatDateTime } from "@/lib/format"
-import { type DataTableFeatures } from "@/components/DataTable"
+import { DataTableFacetedFilter, type DataTableFeatures } from "@/components/DataTable"
 import { type Finding } from "@/db/types"
 
 const columnHelper = createColumnHelper<DataTableFeatures, Finding>()
 
 export const findingsTableColumns = columnHelper.columns([
   columnHelper.accessor("severity", {
-    header: "Severity",
+    filterFn: "arrHas",
+    header: ({ column }) => (
+      <div className="flex items-center justify-between">
+        Severity
+        <DataTableFacetedFilter
+          column={column}
+          options={SEVERITY_FILTER_OPTIONS}
+        />
+      </div>
+    ),
     cell: ({ getValue }) => {
       const { label, variant } = SEVERITY_META[getValue()]
       return <Badge variant={variant}>{label}</Badge>
@@ -23,11 +37,19 @@ export const findingsTableColumns = columnHelper.columns([
   }),
   columnHelper.accessor("location", {
     header: "Location",
-    cell: ({ getValue }) => <span className="text-muted-foreground">{getValue()}</span>,
+    cell: ({ getValue }) => <span>{getValue()}</span>,
   }),
   columnHelper.accessor("category", {
-    header: "Category",
-    
+    filterFn: "arrHas",
+    header: ({ column }) => (
+      <div className="flex items-center justify-between">
+        Category
+        <DataTableFacetedFilter
+          column={column}
+          options={CATEGORY_FILTER_OPTIONS}
+        />
+      </div>
+    ),
     cell: ({ getValue }) => {
       const { label, Icon } = CATEGORY_META[getValue()]
       return (
@@ -41,7 +63,7 @@ export const findingsTableColumns = columnHelper.columns([
   columnHelper.accessor("discoveredAt", {
     header: "Detected",
     cell: ({ getValue }) => (
-      <span className="text-muted-foreground">{formatDateTime(getValue())}</span>
+      <span>{formatDateTime(getValue())}</span>
     ),
   }),
 ])
