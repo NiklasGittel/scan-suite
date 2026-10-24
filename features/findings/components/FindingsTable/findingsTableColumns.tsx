@@ -8,16 +8,20 @@ import {
   CATEGORY_META,
   SEVERITY_FILTER_OPTIONS,
   SEVERITY_META,
+  SEVERITY_RANK,
 } from "@/features/findings/constants"
 import { formatDateTime } from "@/lib/format"
 import { DataTableFacetedFilter, type DataTableFeatures } from "@/components/DataTable"
-import { type Finding } from "@/db/types"
+import { type Finding, type FindingSeverity } from "@/db/types"
 
 const columnHelper = createColumnHelper<DataTableFeatures, Finding>()
 
 export const findingsTableColumns = columnHelper.columns([
   columnHelper.accessor("severity", {
     filterFn: "arrHas",
+    sortFn: (rowA, rowB, columnId) =>
+      SEVERITY_RANK[rowA.getValue<FindingSeverity>(columnId)] -
+      SEVERITY_RANK[rowB.getValue<FindingSeverity>(columnId)],
     header: ({ column }) => (
       <div className="flex items-center justify-between">
         Severity

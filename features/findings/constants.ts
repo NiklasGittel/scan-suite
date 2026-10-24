@@ -32,5 +32,9 @@ export const SEVERITY_META: Record<FindingSeverity, { label: string; variant: Ba
 
 export const SEVERITY_FILTER_OPTIONS = Object.entries(SEVERITY_META).map(([value, { label }]) => ({ value, label }));
 
+export const SEVERITY_RANK = Object.fromEntries(
+    Object.keys(SEVERITY_META).map((severity, index) => [severity, index]),
+) as Record<FindingSeverity, number>;
+
 
 

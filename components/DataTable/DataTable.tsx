@@ -1,7 +1,17 @@
 "use client"
 
-import { useTable, type CellData, type ColumnDef, type RowData } from "@tanstack/react-table"
+import {
+  useTable,
+  type CellData,
+  type ColumnDef,
+  type RowData,
+  type SortingState,
+} from "@tanstack/react-table"
+import { ArrowDownUpIcon, ArrowDownWideNarrowIcon, ArrowUpNarrowWideIcon, ChevronsUpDownIcon } from "lucide-react"
 
+import { cn } from "cn"
+
+import { Button } from "@/components/ui/button"
 import {
   Table,
   TableBody,
@@ -12,11 +22,22 @@ import {
 } from "@/components/ui/table"
 import { dataTableFeatures, type DataTableFeatures } from "./dataTableFeatures"
 
+const SORT_ICON = {
+  asc: ArrowDownWideNarrowIcon,
+  desc: ArrowUpNarrowWideIcon,
+} as const
+
+const SORT_LABEL = {
+  asc: "ascending",
+  desc: "descending",
+} as const
+
 export interface DataTableProps<TData extends RowData> {
   columns: Array<ColumnDef<DataTableFeatures, TData, CellData>>
   data: TData[]
   onRowClick?: (row: TData) => void
   emptyMessage?: string
+  initialSorting?: SortingState
 }
 
 export function DataTable<TData extends RowData>({
@@ -24,11 +45,13 @@ export function DataTable<TData extends RowData>({
   data,
   onRowClick,
   emptyMessage = "No results.",
+  initialSorting,
 }: DataTableProps<TData>) {
   const table = useTable({
     features: dataTableFeatures,
     data,
     columns,
+    initialState: initialSorting ? { sorting: initialSorting } : undefined,
   })
   const rows = table.getRowModel().rows
   return (
@@ -38,10 +61,33 @@ export function DataTable<TData extends RowData>({
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
+                const { column } = header
+                const sorted = column.getIsSorted()
+                const canSort = column.getCanSort()
+                const SortIcon = sorted ? SORT_ICON[sorted] : ArrowDownUpIcon
                 return (
-                  <TableHead key={header.id}>
+                  <TableHead
+                    key={header.id}
+                    aria-sort={sorted ? SORT_LABEL[sorted] : undefined}
+                    className="group"
+                  >
                     {header.isPlaceholder ? null : (
-                      <table.FlexRender header={header} />
+                      <div className="flex items-center gap-1">
+                        <div className="flex-1">
+                          <table.FlexRender header={header} />
+                        </div>
+                        {canSort && (
+                          <Button
+                            className={cn(!sorted && "text-muted-foreground")}
+                            variant="ghost"
+                            size="icon"
+                            aria-label={`Sort by ${column.id}`}
+                            onClick={column.getToggleSortingHandler()}
+                          >
+                            <SortIcon className="h-2 w-2" />
+                          </Button>
+                        )}
+                      </div>
                     )}
                   </TableHead>
                 )
