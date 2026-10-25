@@ -17,7 +17,7 @@ export default async ({ params }: { params: Promise<{ id: string }> }) => {
     if (!site) notFound()
 
     return (
-        <div className="flex min-h-svh p-6">
+        <div className="flex flex-1 p-6">
             <div className="flex w-full max-w-full min-w-0 flex-col gap-4 text-sm">
                 <h1 className="text-3xl font-bold">{site.hostname}</h1>
                 <SiteDetails site={site} />

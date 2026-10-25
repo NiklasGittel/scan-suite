@@ -4,7 +4,7 @@ import { FindingsTableSkeleton } from "@/features/findings/components/FindingsTa
 
 const Loading = () => {
     return (
-        <div className="flex min-h-svh p-6">
+        <div className="flex flex-1 p-6">
             <div className="flex w-full max-w-full min-w-0 flex-col gap-4 text-sm">
                 <Skeleton className="h-9 w-64" />
                 <SiteDetailsSkeleton />
