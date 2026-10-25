@@ -1,6 +1,11 @@
 export { DataTable } from "./DataTable"
 export type { DataTableProps } from "./DataTable"
 export { dataTableFeatures } from "./dataTableFeatures"
-export type { DataTableFeatures } from "./dataTableFeatures"
-export { DataTableFacetedFilter } from "./DataTableFacetedFilter"
-export type { DataTableFacetedFilterProps, FacetedFilterOption } from "./DataTableFacetedFilter"
+export type {
+  DataTableColumnMeta,
+  DataTableFeatures,
+  DataTableFilter,
+  FacetedFilterOption,
+  FilterTypes,
+  SortTypes,
+} from "./dataTableFeatures"

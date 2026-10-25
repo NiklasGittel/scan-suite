@@ -11,7 +11,7 @@ import {
   SEVERITY_RANK,
 } from "@/features/findings/constants"
 import { formatDateTime } from "@/lib/format"
-import { DataTableFacetedFilter, type DataTableFeatures } from "@/components/DataTable"
+import { type DataTableFeatures } from "@/components/DataTable"
 import { type Finding, type FindingSeverity } from "@/db/types"
 
 const columnHelper = createColumnHelper<DataTableFeatures, Finding>()
@@ -22,15 +22,10 @@ export const findingsTableColumns = columnHelper.columns([
     sortFn: (rowA, rowB, columnId) =>
       SEVERITY_RANK[rowA.getValue<FindingSeverity>(columnId)] -
       SEVERITY_RANK[rowB.getValue<FindingSeverity>(columnId)],
-    header: ({ column }) => (
-      <div className="flex items-center justify-between">
-        Severity
-        <DataTableFacetedFilter
-          column={column}
-          options={SEVERITY_FILTER_OPTIONS}
-        />
-      </div>
-    ),
+    header: "Severity",
+    meta: {
+      filter: { variant: "faceted", options: SEVERITY_FILTER_OPTIONS },
+    },
     cell: ({ getValue }) => {
       const { label, variant } = SEVERITY_META[getValue()]
       return <Badge variant={variant}>{label}</Badge>
@@ -38,22 +33,21 @@ export const findingsTableColumns = columnHelper.columns([
   }),
   columnHelper.accessor("title", {
     header: "Finding",
+    meta: { filter: { variant: "text" } },
+    filterFn: "includesString",
   }),
   columnHelper.accessor("location", {
     header: "Location",
     cell: ({ getValue }) => <span>{getValue()}</span>,
+    meta: { filter: { variant: "text" } },
+    filterFn: "includesString",
   }),
   columnHelper.accessor("category", {
     filterFn: "arrHas",
-    header: ({ column }) => (
-      <div className="flex items-center justify-between">
-        Category
-        <DataTableFacetedFilter
-          column={column}
-          options={CATEGORY_FILTER_OPTIONS}
-        />
-      </div>
-    ),
+    header: "Category",
+    meta: {
+      filter: { variant: "faceted", options: CATEGORY_FILTER_OPTIONS },
+    },
     cell: ({ getValue }) => {
       const { label, Icon } = CATEGORY_META[getValue()]
       return (
@@ -66,8 +60,6 @@ export const findingsTableColumns = columnHelper.columns([
   }),
   columnHelper.accessor("discoveredAt", {
     header: "Detected",
-    cell: ({ getValue }) => (
-      <span>{formatDateTime(getValue())}</span>
-    ),
+    cell: ({ getValue }) => <span>{formatDateTime(getValue())}</span>,
   }),
 ])

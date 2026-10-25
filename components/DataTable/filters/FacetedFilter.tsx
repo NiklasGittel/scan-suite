@@ -14,28 +14,32 @@ import {
   CommandList,
   CommandSeparator,
 } from "@/components/ui/command"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 
-import { type DataTableFeatures } from "./dataTableFeatures"
+import {
+  type DataTableFeatures,
+  type FacetedFilterOption,
+} from "../dataTableFeatures"
 
-export interface FacetedFilterOption {
-  value: string
-  label: string
-}
-
-export interface DataTableFacetedFilterProps<TData extends RowData, TValue> {
-  column?: Column<DataTableFeatures, TData, TValue>
+export interface FacetedFilterProps<TData extends RowData, TValue> {
+  column: Column<DataTableFeatures, TData, TValue>
   options: FacetedFilterOption[]
 }
 
-export function DataTableFacetedFilter<TData extends RowData, TValue>({
+const FacetedFilter = <TData extends RowData, TValue>({
   column,
   options,
-}: DataTableFacetedFilterProps<TData, TValue>) {
-  if (!column) return null
+}: FacetedFilterProps<TData, TValue>) => {
+  if (!column.getCanFilter()) return null
 
   const facets = column.getFacetedUniqueValues()
-  const selected = new Set((column.getFilterValue() as string[] | undefined) ?? [])
+  const selected = new Set(
+    (column.getFilterValue() as string[] | undefined) ?? []
+  )
 
   const toggle = (value: string) => {
     const next = new Set(selected)
@@ -49,13 +53,16 @@ export function DataTableFacetedFilter<TData extends RowData, TValue>({
       <PopoverTrigger
         render={
           <Button
-            className={cn("relative", selected.size === 0 && "text-muted-foreground")}
+            className={cn(
+              "relative",
+              selected.size === 0 && "text-muted-foreground"
+            )}
             variant="ghost"
             size="icon"
           >
             <ListFilterIcon />
             {selected.size > 0 && (
-              <span className="absolute -top-0.5 -right-0.5 flex size-4 items-center justify-center rounded-full  text-[10px] leading-none font-medium  tabular-nums">
+              <span className="absolute -top-0.5 -right-0.5 flex size-4 items-center justify-center rounded-full text-[10px] leading-none font-medium tabular-nums">
                 {selected.size}
               </span>
             )}
@@ -77,9 +84,7 @@ export function DataTableFacetedFilter<TData extends RowData, TValue>({
                   disabled={(facets.get(value) ?? 0) === 0}
                 >
                   <span className="flex-1 truncate">{label}</span>
-                  <span className="text-xs">
-                    {facets.get(value) ?? 0}
-                  </span>
+                  <span className="text-xs">{facets.get(value) ?? 0}</span>
                 </CommandItem>
               ))}
             </CommandGroup>
@@ -96,6 +101,7 @@ export function DataTableFacetedFilter<TData extends RowData, TValue>({
           </CommandList>
         </Command>
       </PopoverContent>
-    </Popover >
+    </Popover>
   )
 }
+export default FacetedFilter

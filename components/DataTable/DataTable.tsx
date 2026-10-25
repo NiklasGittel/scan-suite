@@ -7,11 +7,7 @@ import {
   type RowData,
   type SortingState,
 } from "@tanstack/react-table"
-import { ArrowDownUpIcon, ArrowDownWideNarrowIcon, ArrowUpNarrowWideIcon, ChevronsUpDownIcon } from "lucide-react"
 
-import { cn } from "cn"
-
-import { Button } from "@/components/ui/button"
 import {
   Table,
   TableBody,
@@ -21,16 +17,8 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { dataTableFeatures, type DataTableFeatures } from "./dataTableFeatures"
-
-const SORT_ICON = {
-  asc: ArrowDownWideNarrowIcon,
-  desc: ArrowUpNarrowWideIcon,
-} as const
-
-const SORT_LABEL = {
-  asc: "ascending",
-  desc: "descending",
-} as const
+import ColumnSort from "./ColumnSort"
+import ColumnFilter from "./filters/ColumnFilter"
 
 export interface DataTableProps<TData extends RowData> {
   columns: Array<ColumnDef<DataTableFeatures, TData, CellData>>
@@ -39,6 +27,11 @@ export interface DataTableProps<TData extends RowData> {
   emptyMessage?: string
   initialSorting?: SortingState
 }
+
+const SORT_LABEL = {
+  asc: "ascending",
+  desc: "descending",
+} as const
 
 export function DataTable<TData extends RowData>({
   columns,
@@ -63,8 +56,7 @@ export function DataTable<TData extends RowData>({
               {headerGroup.headers.map((header) => {
                 const { column } = header
                 const sorted = column.getIsSorted()
-                const canSort = column.getCanSort()
-                const SortIcon = sorted ? SORT_ICON[sorted] : ArrowDownUpIcon
+                const filter = column.columnDef.meta?.filter
                 return (
                   <TableHead
                     key={header.id}
@@ -76,17 +68,10 @@ export function DataTable<TData extends RowData>({
                         <div className="flex-1">
                           <table.FlexRender header={header} />
                         </div>
-                        {canSort && (
-                          <Button
-                            className={cn(!sorted && "text-muted-foreground")}
-                            variant="ghost"
-                            size="icon"
-                            aria-label={`Sort by ${column.id}`}
-                            onClick={column.getToggleSortingHandler()}
-                          >
-                            <SortIcon className="h-2 w-2" />
-                          </Button>
+                        {filter && (
+                          <ColumnFilter column={column} filter={filter} />
                         )}
+                        <ColumnSort sorted={sorted} column={column} />
                       </div>
                     )}
                   </TableHead>
@@ -113,7 +98,10 @@ export function DataTable<TData extends RowData>({
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center text-muted-foreground">
+              <TableCell
+                colSpan={columns.length}
+                className="h-24 text-center text-muted-foreground"
+              >
                 {emptyMessage}
               </TableCell>
             </TableRow>
