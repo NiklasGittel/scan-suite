@@ -21,7 +21,8 @@ export const siteTableColumns = columnHelper.columns([
     header: "",
     cell: ({ row }) => (
       <div className="flex justify-end">
-        {row.original.status !== "verified" && <VerificationDialog site={row.original} />}        <div className="invisible group-hover:visible group-focus-within:visible">
+        {row.original.status !== "verified" && <VerificationDialog site={row.original} />}
+        <div className="invisible group-hover:visible group-focus-within:visible">
           <DeleteSiteDialog site={row.original} />
         </div>
       </div>

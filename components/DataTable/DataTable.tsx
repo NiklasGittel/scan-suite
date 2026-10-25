@@ -87,7 +87,11 @@ export function DataTable<TData extends RowData>({
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}
                 className={onRowClick ? "group cursor-pointer" : "group"}
-                onClick={onRowClick && (() => onRowClick(row.original))}
+                onClick={onRowClick && ((e) => {
+                  if ((e.target as HTMLElement).closest("button, a, input, [role=checkbox]")) return
+                  onRowClick(row.original)
+                })}
+
               >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id}>
