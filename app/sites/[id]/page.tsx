@@ -1,14 +1,19 @@
+import { Suspense } from "react"
 import { notFound } from "next/navigation"
 import { getSite } from "@/db/queries/sites"
 import { SiteDetails } from "@/features/sites/components/SiteDetails"
 import { getFindingsForSite } from "@/db/queries/findings"
-import { FindingsTable } from "@/features/findings/components/FindingsTable"
+import { FindingsTable, FindingsTableSkeleton } from "@/features/findings/components/FindingsTable"
+
+const SiteFindings = async ({ id }: { id: string }) => {
+    const findings = await getFindingsForSite(id)
+
+    return <FindingsTable findings={findings} />
+}
 
 export default async ({ params }: { params: Promise<{ id: string }> }) => {
     const { id } = await params
     const site = await getSite(id)
-    const findings = await getFindingsForSite(id)
-
     if (!site) notFound()
 
     return (
@@ -16,7 +21,9 @@ export default async ({ params }: { params: Promise<{ id: string }> }) => {
             <div className="flex w-full max-w-full min-w-0 flex-col gap-4 text-sm">
                 <h1 className="text-3xl font-bold">{site.hostname}</h1>
                 <SiteDetails site={site} />
-                <FindingsTable findings={findings} />
+                <Suspense fallback={<FindingsTableSkeleton />}>
+                    <SiteFindings id={id} />
+                </Suspense>
             </div>
         </div>
     )
